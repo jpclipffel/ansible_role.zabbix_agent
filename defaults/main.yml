@@ -1,0 +1,17 @@
+# Service
+zabbix_agent_service_name: zabbix-agent
+zabbix_agent_service_path: "/etc/systemd/system/{{ zabbix_agent_service_name }}.service"
+zabbix_agent_service_description: Zabbix Agent 2
+zabbix_agent_service_documentation: "https://hub.docker.com/r/zabbix/zabbix-agent2/"
+
+# Container
+zabbix_agent_container: zabbix/zabbix-agent2
+zabbix_agent_container_version: latest
+zabbix_agent_container_name: zabbix-agent
+
+# Server
+zabbix_agent_server_host: 172.29.249.203
+
+# Zabbix server configuration
+zabbiz_agent_templates:
+  - "Template OS {{ ansible_system }}"

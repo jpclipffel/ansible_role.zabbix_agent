@@ -1,0 +1,31 @@
+[Unit]
+Description={{ zabbix_agent_service_description }}
+Documentation={{ zabbix_agent_service_documentation }}
+After=docker.service
+Requires=docker.service
+
+[Service]
+Environment="CONTAINER={{ zabbix_agent_container }}"
+Environment="CONTAINER_VERSION={{ zabbix_agent_container_version }}"
+Environment="CONTAINER_NAME={{ zabbix_agent_container_name }}"
+Environment="ZBX_SERVER_HOST={{ zabbix_agent_server_host }}"
+TimeoutStartSec=0
+Restart=always
+RestartSec=30
+ExecStartPre=/usr/bin/docker pull ${CONTAINER}:${CONTAINER_VERSION}
+ExecStartPre=-/usr/bin/docker kill ${CONTAINER_NAME}
+ExecStartPre=-/usr/bin/docker rm ${CONTAINER_NAME}
+ExecStart=/usr/bin/docker run --name ${CONTAINER_NAME} \
+  --privileged \
+  --net=host \
+  --pid=host \
+  --hostname "%H" \
+  -e "ZBX_HOSTNAMEITEM=system.hostname" \
+  -e "ZBX_ENABLEREMOTECOMMANDS=1" \
+  -e "ZBX_LOGREMOTECOMMANDS=1" \
+  -e "ZBX_SERVER_HOST=${ZBX_SERVER_HOST}" \
+  ${CONTAINER}:${CONTAINER_VERSION}
+ExecStop=/usr/bin/docker stop ${CONTAINER_NAME}
+
+[Install]
+WantedBy=multi-user.target

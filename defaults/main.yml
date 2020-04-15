@@ -13,5 +13,5 @@ zabbix_agent_container_name: zabbix-agent
 zabbix_agent_server_host: 172.29.249.203
 
 # Zabbix server configuration
-zabbiz_agent_templates:
+zabbix_agent_templates:
   - "Template OS {{ ansible_system }}"

@@ -10,7 +10,14 @@ zabbix_agent_container_version: latest
 zabbix_agent_container_name: zabbix-agent
 
 # Server
-zabbix_agent_server_host: 172.29.249.203
+zabbix_agent_server_host: 172.29.225.11
+zabbix_agent_server_url: "https://zabbix.dt.ept.lu"
+# zabbix_agent_server_user: ""
+# zabbix_agent_server_password: ""
+zabbix_agent_server_groups: [ "ansible_managed" ]
+zabbix_agent_server_templates: []
+zabbix_agent_server_timeout: 10
+zabbix_agent_server_register: no
 
 # Zabbix server configuration
 zabbix_agent_templates:

@@ -22,6 +22,60 @@
     - setup
 
 
+- name: Install Python requirements
+  pip:
+    name: "zabbix-api"
+    state: present
+  when:
+    - zabbix_agent_server_register is true
+  tags:
+    - setup
+
+
+- name: Register host on Zabbix
+  zabbix_host:
+    validate_certs: no
+    server_url: "{{ zabbix_agent_server_url }}"
+    login_user: "{{ zabbix_agent_server_user }}"
+    login_password: "{{ zabbix_agent_server_password }}"
+    host_name: "{{ ansible_hostname }}"
+    state: present
+    status: enabled
+    force: yes
+    description: "Managed by Ansible"
+    host_groups: "{{ zabbix_agent_server_groups }}"
+    link_templates: "{{ zabbix_agent_server_templates }}"
+    timeout: "{{ zabbix_agent_server_timeout | int }}"
+  when:
+    - zabbix_agent_server_register is true
+  tags:
+    - setup
+
+
+- name: Unregister host from Zabbix
+  zabbix_host:
+    server_url: "{{ zabbix_agent_server_url }}"
+    validate_certs: no
+    login_user: "{{ zabbix_agent_server_user }}"
+    login_password: "{{ zabbix_agent_server_password }}"
+    host_name: "{{ ansible_hostname }}"
+    state: absent
+  when:
+    - zabbix_agent_server_register is true
+  tags:
+    - teardown
+    - remove
+
+
+- name: Remove Python requirements
+  pip:
+    name: "zabbix-api"
+    state: absent
+  tags:
+    - teardown
+    - remove
+
+
 - name: Stop and disable Zabbix agent service
   service:
     name: "{{ zabbix_agent_service_name }}"
@@ -29,6 +83,7 @@
     enabled: no
   tags:
     - teardown
+    - remove
 
 
 - name: Remove Zabbix agent service

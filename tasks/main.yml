@@ -1,10 +1,3 @@
-- name: Configure container runtime
-  include_role:
-    name: common/docker_base
-  tags:
-    - setup
-
-
 - name: Template Zabbix agent service
   template:
     src: zabbix-agent.service.j2
@@ -17,7 +10,7 @@
   service:
     name: "{{ zabbix_agent_service_name }}"
     state: restarted
-    enabled: yes
+    enabled: true
   tags:
     - setup
 
@@ -34,14 +27,14 @@
 
 - name: Register host on Zabbix
   zabbix_host:
-    validate_certs: no
+    validate_certs: false
     server_url: "{{ zabbix_agent_server_url }}"
     login_user: "{{ zabbix_agent_server_user }}"
     login_password: "{{ zabbix_agent_server_password }}"
     host_name: "{{ ansible_hostname }}"
     state: present
     status: enabled
-    force: yes
+    force: true
     description: "Managed by Ansible"
     host_groups: "{{ zabbix_agent_server_groups }}"
     link_templates: "{{ zabbix_agent_server_templates }}"
@@ -55,7 +48,7 @@
 - name: Unregister host from Zabbix
   zabbix_host:
     server_url: "{{ zabbix_agent_server_url }}"
-    validate_certs: no
+    validate_certs: false
     login_user: "{{ zabbix_agent_server_user }}"
     login_password: "{{ zabbix_agent_server_password }}"
     host_name: "{{ ansible_hostname }}"
@@ -80,7 +73,7 @@
   service:
     name: "{{ zabbix_agent_service_name }}"
     state: stopped
-    enabled: no
+    enabled: false
   tags:
     - teardown
     - remove

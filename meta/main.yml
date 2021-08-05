@@ -1,3 +1,3 @@
 galaxy_info:
   role_name: zabbix_agent
-  description: Manages Zabbix agents
+  description: Deploy and configure Zabbix agent as a container

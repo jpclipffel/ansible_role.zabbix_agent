@@ -22,7 +22,6 @@ ExecStart=/usr/bin/docker run --name ${CONTAINER_NAME} \
   --hostname "%H" \
   -e "ZBX_HOSTNAMEITEM=system.hostname" \
   -e "ZBX_ENABLEREMOTECOMMANDS=1" \
-  -e "ZBX_LOGREMOTECOMMANDS=1" \
   -e "ZBX_SERVER_HOST=${ZBX_SERVER_HOST}" \
   ${CONTAINER}:${CONTAINER_VERSION}
 ExecStop=/usr/bin/docker stop ${CONTAINER_NAME}

@@ -2,18 +2,21 @@
   template:
     src: zabbix-agent.service.j2
     dest: "{{ zabbix_agent_service_path }}"
-  tags:
-    - setup
+    mode: 0644
+  tags: [setup]
 
+- name: Reload systemctl
+  shell: |
+    systemctl daemon-reload
+  changed_when: false
+  tags: [setup]
 
 - name: Start and enable Zabbix agent service
   service:
     name: "{{ zabbix_agent_service_name }}"
     state: restarted
     enabled: true
-  tags:
-    - setup
-
+  tags: [setup]
 
 - name: Install Python requirements
   pip:
@@ -21,9 +24,7 @@
     state: present
   when:
     - zabbix_agent_server_register is true
-  tags:
-    - setup
-
+  tags: [setup]
 
 - name: Register host on Zabbix
   zabbix_host:
@@ -41,9 +42,7 @@
     timeout: "{{ zabbix_agent_server_timeout | int }}"
   when:
     - zabbix_agent_server_register is true
-  tags:
-    - setup
-
+  tags: [setup]
 
 - name: Unregister host from Zabbix
   zabbix_host:
@@ -55,33 +54,23 @@
     state: absent
   when:
     - zabbix_agent_server_register is true
-  tags:
-    - teardown
-    - remove
-
+  tags: [teardown, remove]
 
 - name: Remove Python requirements
   pip:
     name: "zabbix-api"
     state: absent
-  tags:
-    - teardown
-    - remove
-
+  tags: [teardown, remove]
 
 - name: Stop and disable Zabbix agent service
   service:
     name: "{{ zabbix_agent_service_name }}"
     state: stopped
     enabled: false
-  tags:
-    - teardown
-    - remove
-
+  tags: [teardown, remove]
 
 - name: Remove Zabbix agent service
   file:
     path: "{{ zabbix_agent_service_path }}"
     state: absent
-  tags:
-    - remove
+  tags: [remove]

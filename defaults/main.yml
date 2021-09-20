@@ -1,3 +1,5 @@
+# code: language=yaml tabSize=2
+
 # Service
 zabbix_agent_service_name: zabbix-agent
 zabbix_agent_service_path: "/etc/systemd/system/{{ zabbix_agent_service_name }}.service"
@@ -6,11 +8,11 @@ zabbix_agent_service_documentation: "https://hub.docker.com/r/zabbix/zabbix-agen
 
 # Container
 zabbix_agent_container: zabbix/zabbix-agent2
-zabbix_agent_container_version: latest
+zabbix_agent_container_version: "alpine-5.0.0"
 zabbix_agent_container_name: zabbix-agent
 
 # Server
-zabbix_agent_server_host: 172.29.225.11
+zabbix_agent_server_host: 172.29.249.203
 zabbix_agent_server_url: "https://zabbix.dt.ept.lu"
 # zabbix_agent_server_user: ""
 # zabbix_agent_server_password: ""
